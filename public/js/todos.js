@@ -10,22 +10,30 @@ dueDateInput.value = moment().add(1, 'day').format('YYYY-MM-DD');
 
 // Checkbox function
 
+// Listen for all clicks in parent container of checkbox (Event Bubbling)
+document.querySelector('.todosContainer').addEventListener('click', handleClickOnCheckbox);
+
 function handleClickOnCheckbox(e) {
     if (e.target.type === 'checkbox') {
         // Get the data-id attribute that has the current todo item ID
-        toggleTodoComplete(e.target.dataset.id, e.target.checked);
+        var todoId = e.target.getAttribute('data-id');
 
         // Check to see if the checkbox is checked (returns true if it is, false if it isn't)
-        function toggleTodoComplete(todoId, isComplete) {
-            if (isComplete = true) {
-                fetch('/api/v1/todos' + todoId + '/complete')
-            } else {
-                fetch('/api/v1/toos' + todoId + '/complete')
-            }
-        }
+        var isComplete = e.target.checked;
 
         // Call the toggleTodoComplete function and pass our ID and completion status to it
-        toggleTodoComplete(todoId, isComplete)
+        toggleTodoComplete(todoId, isComplete);
+    }
+}
+
+// Toggle to do completion status
+function toggleTodoComplete(todoId, isComplete) {
+    if (isComplete) {
+        fetch('/api/v1/todos/' + todoId + '/complete')
+        .then(getTodos)
+        } else {
+        fetch('/api/v1/todos/' + todoId + '/incomplete')
+        .then(getTodos)
     }
 }
 
